@@ -1,8 +1,8 @@
 <template>
     <form @submit.prevent>
         <h4>Создание поста</h4>
-        <input v-model="post.title" class="input" type="text" placeholder="Название">
-        <input v-model="post.body" class="input" type="text" placeholder="Описание">
+        <my-input v-model="post.title" type="text" placeholder="Название"/>
+        <my-input v-model="post.body" type="text" placeholder="Описание"/>
         <my-button style="align-self: flex-end; margin-top: 15px;" @click="createPost">Создать</my-button>
     </form>
 </template>
@@ -28,15 +28,6 @@ export default {
                 title: '',
                 body: ''
             }
-
-            // const newPost = {
-            //     id: Date.now,
-            //     title: this.title,
-            //     body: this.body,
-            // }
-            // this.posts.push(newPost);
-            // this.title = '';
-            // this.body = '';
         }
     }
 }
@@ -48,12 +39,7 @@ form {
     flex-direction: column;
 }
 
-.input {
-    width: 100%;
-    border: 2px solid teal;
-    padding: 10px 15px;
-    margin-top: 15px;
-}
+
 
 
 </style>

@@ -1,7 +1,12 @@
 <template>
     <div class="app">
-        <post-form @create="createPost"/>
-        <post-list :posts="posts" />
+        <h1>Страница с постами</h1>
+        <my-button @click="showDialog" style="margin: 15px 0;">Создать пользователя</my-button>
+        <my-dialog v-model:show="dialogVisible">
+            <post-form @create="createPost"/>
+        </my-dialog>
+        
+        <post-list :posts="posts" @remove="removePost"/>
         
     </div>
 </template>
@@ -22,27 +27,22 @@ export default {
                 {id: 3, title: 'JavaScript3', body: 'Описание поста 3'},
                 {id: 4, title: 'JavaScript4', body: 'Описание поста 4'},
             ],
+            dialogVisible: false,
         }
     },
     methods: {
         createPost(post) {
-            console.log(post);
             this.posts.push(post);
-
-            // if (this.title == '' || this.body == '')
-            // return;
-
-            // const newPost = {
-            //     id: Date.now,
-            //     title: this.title,
-            //     body: this.body,
-            // }
-            // this.posts.push(newPost);
-            // this.title = '';
-            // this.body = '';
+            this.dialogVisible = false;
+        },
+        removePost(post) {
+            this.posts = this.posts.filter(p => p.id !== post.id)
         },
         inputTitle(event) {
             this.title = event.target.value;
+        },
+        showDialog() {
+            this.dialogVisible = true;
         }
     }
 }
