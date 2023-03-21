@@ -1,12 +1,16 @@
 <template>
     <div class="app">
         <h1>Страница с постами</h1>
-        <my-button @click="showDialog" style="margin: 15px 0;">Создать пользователя</my-button>
+        <div class="app__btns">
+            <my-button @click="showDialog" >Создать пользователя</my-button>
+            <my-select v-model="selectedSort" :options="sortOptions"/>
+        </div>
+        
         <my-dialog v-model:show="dialogVisible">
             <post-form @create="createPost"/>
         </my-dialog>
         
-        <post-list :posts="posts" @remove="removePost" v-if="!isPostLoading"/>
+        <post-list :posts="sortedPosts" @remove="removePost" v-if="!isPostLoading"/>
         <div v-else>Идет загрузка...</div>
         
     </div>
@@ -25,6 +29,11 @@ export default {
             posts: [],
             dialogVisible: false,
             isPostLoading: false,
+            selectedSort: '',
+            sortOptions: [
+                {value: 'title', name: 'По названию'},
+                {value: 'body', name: 'По содержимому'},
+            ]
         }
     },
     methods: {
@@ -44,22 +53,32 @@ export default {
         async fetchPosts() {
             try {
                 this.isPostLoading = true;
-                setTimeout(async() => {
-                    const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
-                    this.posts = response.data;
-                    this.isPostLoading = false;
-                }, 1000)
-                
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10');
+                this.posts = response.data;                
             } catch (error) {
                 alert('Ошибка')
             } finally {
-                
+                this.isPostLoading = false;
             }
         },        
     },
     mounted() {
             this.fetchPosts();
+        },
+    computed: {
+        sortedPosts() {
+            return [...this.posts].sort((post1, post2) => {return post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+            })
         }
+    },
+    watch: {
+        //название должно совпадать с именем поля
+        // selectedSort(newValue) {
+        //     this.posts.sort((post1, post2) => {
+        //         return post1[newValue]?.localeCompare(post2[newValue])
+        //     })
+        // },
+    }
 }
 
 </script>
@@ -75,5 +94,10 @@ export default {
     padding: 20px;
 }
 
+.app__btns {
+    margin: 15px 0;
+    display: flex;
+    justify-content: space-between;
+}
 
 </style>

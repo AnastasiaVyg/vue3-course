@@ -29,7 +29,15 @@ export default {
                 body: ''
             }
         }
-    }
+    },
+    // watch: {
+    //     post: {
+    //         handler(newVal) {
+    //             console.log(newVal)
+    //         },
+    //         deep: true
+    //     }
+    // }
 }
 </script>
 
